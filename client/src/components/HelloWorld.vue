@@ -17,7 +17,7 @@
                 <ul v-show="member.isShow">
                   <li v-for="(item) in member.daoList" :key="item.eid">
                     <div class="oneMenuChildChild">
-                      <span>时间:{{item.time.split('.')[0]}},{{item.round}}周目,BOSS {{item.boss}},伤害:{{item.dmg}}</span>
+                      <span>时间:{{item.time}},{{item.round}}周目,BOSS {{item.boss}},伤害:{{item.dmg}}</span>
                     </div>
                   </li>
                 </ul>
@@ -76,7 +76,10 @@ export default {
     showDaos(item, clanIndex) {
       if (!item.isShow) {
         axios.get(`/api/daos?gid=${item.gid}&cid=${item.cid}&uid=${item.uid}&alt=${item.alt}`).then(res => {
-          res.data.forEach(item => item.isShow = false);
+          res.data.forEach(item => {
+            item.isShow = false;
+            item.time = item.time.split('.')[0];
+          });
           item.daoList = res.data;
           item.isShow = !item.isShow;
           this.$set(this.clanList, clanIndex, this.clanList[clanIndex]);
