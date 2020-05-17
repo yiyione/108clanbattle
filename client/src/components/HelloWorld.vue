@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     showMembers(item) {
-      if (!item.memberList) {
+      if (!item.isShow) {
         axios.get(`/api/members?gid=${item.gid}&cid=${item.cid}`).then(res => {
           res.data.forEach(child => {
             child.gid = item.gid;
@@ -74,7 +74,7 @@ export default {
       }
     },
     showDaos(item, clanIndex) {
-      if (!item.daoList) {
+      if (!item.isShow) {
         axios.get(`/api/daos?gid=${item.gid}&cid=${item.cid}&uid=${item.uid}&alt=${item.alt}`).then(res => {
           res.data.forEach(item => item.isShow = false);
           item.daoList = res.data;
