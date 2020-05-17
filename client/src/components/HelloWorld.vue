@@ -120,12 +120,12 @@ export default {
         }
         .oneMenuChildChild{
           padding: 0 20px 0 20px;
-          height: 40px;
-          line-height: 40px;
+          height: 100%;
           background: $menuBackColor;
           border-bottom: 1px solid #ffffff;
           color: #454343;
           font-size: 18px;
+          word-wrap: break-word;
         }
       }
     }
