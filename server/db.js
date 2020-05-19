@@ -145,7 +145,15 @@ function get_table_name(gid, cid, yyyy, mm) {
     const data = new Date();
     if (yyyy == undefined) {
       yyyy = data.getFullYear();
-      mm = data.getMonth();
+      mm = data.getMonth() + 1;
+      dd = data.getDate();
+      if (dd < 20) {
+        mm = mm - 1;
+      }
+      if (mm < 1) {
+        mm = 12;
+        yyyy = yyyy - 1;
+      }
     }
     return `battle_${gid}_${cid}_${pad(yyyy, 4)}${pad(mm, 2)}`;
 }
