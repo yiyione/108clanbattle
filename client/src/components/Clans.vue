@@ -1,7 +1,5 @@
 <template>
-  <div class="hello">
-    <h1>欢迎使用108集团公会战机器人</h1>
-    <h3>公会列表</h3>
+  <div class="ClanList">
     <div class="asideBox">
       <aside>
         <ul class="asideMenu">
@@ -33,7 +31,7 @@
 <script>
 const axios = require('axios');
 export default {
-  name: 'HelloWorld',
+  name: 'Clans',
   data() {
     return {
       clanList: [{
