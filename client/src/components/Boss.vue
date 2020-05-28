@@ -1,26 +1,72 @@
 <template>
   <v-container>
-    <h3>BOSS状态</h3>
+    <v-divider inset></v-divider>
+    <h1>BOSS状态</h1>
     <v-row>
-        <v-col :span="12"><a class="exbig">{{ bossData.cycle }}</a><a class="big">周目</a></v-col>
-        <v-col :span="12"><a class="exbig">{{ bossData.num }}</a><a class="big">号boss</a></v-col>
+      <v-col :span="12"></v-col>
+      <v-col :span="12"><a class="exbig">{{ bossData.round }}</a><a class="big">周目</a></v-col>
+      <v-col :span="12"><a class="exbig">{{ bossData.boss }}</a><a class="big">号boss</a></v-col>
+      <v-col :span="12"></v-col>
     </v-row>
     <v-row>
-        <v-col :span="24"><a :class="{ exbig: !bossData.challenger }">{{ bossData.health.toLocaleString() }}</a>/{{ bossData.full_health.toLocaleString() }}</v-col>
+      <v-col :span="24"><span :style="{'color':getProgressLinearColor()}" :class="{ exbig: !bossData.challenger }">{{ bossData.remind_hp.toLocaleString() }}</span>/{{ bossData.total_hp.toLocaleString() }}</v-col>
     </v-row>
     <template v-if="bossData.challenger">
-        <v-row>
-            <v-col :span="24">
-                <a style="font-size:32px;color:#003300;">{{ find_name(bossData.challenger) }}</a>
-                <a v-if="bossData.lock_type==1">正在挑战boss</a>
-                <a v-else>锁定 boss 留言：{{ bossData.challenging_comment }}</a>
-            </v-col>
-        </v-row>
+      <v-row>
+          <v-col :span="24">
+              <a style="font-size:32px;color:#003300;">{{ bossData.challenger.name }}</a>
+              <a v-if="bossData.challenger"> 正在挑战boss </a>
+          </v-col>
+      </v-row>
     </template>
     <v-row style="margin-bottom: 25px">
         <v-col :span="24">
-            <v-progress-linear :value="bossData.health/bossData.full_health*100" :show-text="false" :color="bossData.challenger ? '#909399' : '#67C23A'" />
+            <v-progress-linear
+              :value="bossData.remind_hp/bossData.total_hp*100"
+              :color="getProgressLinearColor()"
+              height="10"
+            />
         </v-col>
+    </v-row>
+
+    <v-row align="center">
+      <v-col>
+      </v-col>
+      <v-col>
+        <v-btn x-large color="success">报刀</v-btn>
+      </v-col>
+      <v-col>
+        <v-btn x-large color="warning">补时刀</v-btn>
+      </v-col>
+      <v-col>
+        <v-btn x-large color="warning">尾刀</v-btn>
+      </v-col>
+      <v-col>
+        <v-btn x-large color="error">掉刀</v-btn>
+      </v-col>
+      <v-col>
+        <v-btn x-large color="error">挂树</v-btn>
+      </v-col>
+      <v-col>
+      </v-col>
+    </v-row>
+    <v-row align="center">
+      <v-col>
+      </v-col>
+      <v-col>
+        <v-btn x-large color="primary">申请出刀</v-btn>
+      </v-col>
+      <v-col>
+        <v-btn x-large>取消申请</v-btn>
+      </v-col>
+      <v-col>
+        <v-btn x-large>预约BOSS</v-btn>
+      </v-col>
+      <v-col>
+        <v-btn x-large>取消预约</v-btn>
+      </v-col>
+      <v-col>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -31,59 +77,34 @@ export default {
   name: 'Boss',
   data() {
     return {
-      clanList: [{
-        memberList: [{
-          daoList: [{
-            isShow: Boolean
-          }],
-          isShow: Boolean
-        }],
-        isShow: Boolean
-      }]
+      bossData: {
+        round: Number,
+        boss: Number,
+        remind_hp: Number,
+        total_hp: Number,
+        challenger: Object
+      }
     }
   },
   mounted() {
-    axios.get('/api/clans').then(res => {
-      res.data.forEach(item => item.isShow = false);
-      this.clanList = res.data;
+    axios.get('/api/boss?gid=1020774592').then(res => {
+      res.data.challenger = undefined;
+      this.bossData = res.data;
     }).catch(err => {
       console.log(err);
     });
   },
   methods: {
-    showMembers(item) {
-      if (!item.isShow) {
-        axios.get(`/api/members?gid=${item.gid}&cid=${item.cid}`).then(res => {
-          res.data.forEach(child => {
-            child.gid = item.gid;
-            child.cid = item.cid;
-            child.isShow = false;
-          });
-          item.memberList = res.data;
-          item.isShow = !item.isShow;
-        }).catch(err => {
-          console.log(err);
-        });
+    getProgressLinearColor() {
+      const percentage = this.bossData.remind_hp / this.bossData.total_hp * 100;
+      if (percentage > 70) {
+        return '#67C23A';
+      } else if (percentage > 50) {
+        return '#9ACD32';
+      } else if (percentage > 30) {
+        return '#FFA500';
       } else {
-        item.isShow = !item.isShow;
-      }
-    },
-    showDaos(item, clanIndex) {
-      if (!item.isShow) {
-        axios.get(`/api/daos?gid=${item.gid}&cid=${item.cid}&uid=${item.uid}&alt=${item.alt}`).then(res => {
-          res.data.forEach(item => {
-            item.isShow = false;
-            item.time = item.time.split('.')[0];
-          });
-          item.daoList = res.data;
-          item.isShow = !item.isShow;
-          this.$set(this.clanList, clanIndex, this.clanList[clanIndex]);
-        }).catch(err => {
-          console.log(err);
-        });
-      } else {
-        item.isShow = !item.isShow;
-          this.$set(this.clanList, clanIndex, this.clanList[clanIndex]);
+        return '#FF0000';
       }
     }
   }
@@ -91,41 +112,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  $menuBackColor:#f1f1f1;
-  $menuListH2:#8fbfef;
-  .asideBox{
-    height: 100%;
-    aside{
-      background: $menuBackColor;
-      height: 100%;
-      .asideMenu{
-        .oneMenu{
-          height: 50px;
-          line-height: 50px;
-          font-size: 18px;
-          font-weight: normal;
-          color: #454343;
-          border-bottom: 1px solid #669cd9;
-        }
-        .oneMenuChild{
-          padding: 0 20px 0 20px;
-          height: 40px;
-          line-height: 40px;
-          background: $menuBackColor;
-          border-bottom: 1px solid #ffffff;
-          color: #454343;
-          font-size: 18px;
-        }
-        .oneMenuChildChild{
-          padding: 0 20px 0 20px;
-          height: 100%;
-          background: $menuBackColor;
-          border-bottom: 1px solid #ffffff;
-          color: #454343;
-          font-size: 18px;
-          word-wrap: break-word;
-        }
-      }
-    }
+  body{
+    text-align:center;
+  }
+  .big{
+    font-size:32px;
+  }
+  .exbig{
+    font-size:48px;
+  }
+  .v-row {
+    margin-bottom: 15px;
+  }
+  v-button {
+    width: 80px;
   }
 </style>

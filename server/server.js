@@ -1,7 +1,5 @@
 const db = require('./db');
-/*const http = require('http');
-const path = require('path');
-const fs = require('fs').promises;*/
+const { BattleMaster } = require('./models/battleMaster');
 
 const express = require('express');
 const app = express()
@@ -28,8 +26,18 @@ app.get('/api/daos', (req, res) => {
         res.send(data);
     }).catch(err => {
         console.log(err);
-    })
-})
+    });
+});
+
+app.get('/api/boss', (req, res) => {
+    const battleMaster = new BattleMaster(req.query.gid);
+    battleMaster.getChallengeProgress(1, new Date()).then(data => {
+        res.send(data);
+    }).catch(err => {
+        console.log(err);
+        res.sendStatus(404);
+    });
+});
 
 app.use(express.static('client/dist'));
 

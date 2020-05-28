@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid style="max-width: 1010px">
     <v-row class="text-center">
       <v-col cols="12">
         <v-img
@@ -7,6 +7,7 @@
           class="my-3"
           contain
           height="100%"
+          
         />
       </v-col>
 
@@ -27,10 +28,6 @@
         class="mb-5"
         cols="12"
       >
-        <h2 class="headline font-weight-bold mb-3">
-          公会战数据查询
-        </h2>
-
         <v-row justify="center">
           <a
             v-for="(next, i) in battleData"
@@ -72,12 +69,16 @@
 <script>
   import Clans from './Clans';
   import Daos from './Daos';
+  import Boss from './Boss';
+  import Qidai from './Qidai';
 
   export default {
     name: 'Welcome',
     components: {
       Clans,
-      Daos
+      Daos,
+      Boss,
+      Qidai
     },
     data: () => ({
       importantLinks: [
@@ -108,7 +109,7 @@
           view: 'Boss',
         },
         {
-          text: '工会列表',
+          text: '人员列表',
           view: 'Clans',
         },
         {
@@ -116,8 +117,12 @@
           view: 'Daos',
         },
         {
+          text: '伤害统计',
+          view: 'Qidai',
+        },
+        {
           text: '积分统计',
-          view: 'Daos',
+          view: 'Qidai',
         },
       ],
       currentView: ''

@@ -1,4 +1,3 @@
-const sqlite3 = require('sqlite3').verbose();
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const path = require('path');
 const os = require('os');
@@ -141,40 +140,64 @@ function pad(num, size) {
   return s;
 }
 
-function get_table_name(gid, cid, yyyy, mm) {
-    const data = new Date();
-    if (yyyy == undefined) {
-      yyyy = data.getFullYear();
-      mm = data.getMonth() + 1;
-      dd = data.getDate();
-      if (dd < 20) {
+function getDateString(date) {
+    if (date === undefined) {
+        date = new Date();
+    }
+    
+    let yyyy = date.getFullYear();
+    let mm = date.getMonth() + 1;
+    let dd = date.getDate();
+
+    if (dd < 20) {
         mm = mm - 1;
-      }
-      if (mm < 1) {
+    }
+
+    if (mm < 1) {
         mm = 12;
         yyyy = yyyy - 1;
-      }
+    }
+
+    return {
+        yyyy,
+        mm,
+        dd
+    };
+}
+
+function get_table_name(gid, cid, yyyy, mm) {
+    if (yyyy == undefined) {
+      const dateString = getDateString();
+      yyyy = dateString.yyyy;
+      mm = dateString.mm;
     }
     return `battle_${gid}_${cid}_${pad(yyyy, 4)}${pad(mm, 2)}`;
 }
 
 const queryAllDaos = query => {
   return new Promise((resolve, reject) => {
-    const tableName = get_table_name(query.gid, query.cid);
+    const tableName = get_table_name(query.gid, query.cid, query.yyyy, query.mm);
     if (battleDaoTables[tableName] == undefined) {
-      console.log(tableName);
       battleDaoTables[tableName] = sequelize.define(tableName, battleDaoDefine, {
         tableName: tableName,
         timestamps: false
       });
     }
-    if (query.gid && query.cid && query.uid && query.alt) {
+    const where = {};
+    if (query.uid && query.alt) {
+      where['uid'] = query.uid;
+      where['alt'] = query.alt;
+    }
+    if (query.gid && query.cid) {
       battleDaoTables[tableName].findAll({
           tableName: tableName,
-          where: {
-            uid: query.uid,
-            alt: query.alt
-          }
+          where: where,
+          order: [
+            ['round'],
+            ['boss'],
+            ['eid']
+          ],
+          raw: true
         })
         .then(daos => resolve(daos || []))
         .catch(err => {
@@ -198,4 +221,24 @@ const queryAllClans = () => {
   });
 }
 
-module.exports = { queryAllMembers, queryAllDaos, queryAllClans }
+const getMember = query =>  {
+  return new Promise((resolve, reject) => {
+    if (query.uid && query.alt) {
+      MemberDao.findAll({
+          where: {
+            uid: query.uid,
+            alt: query.alt
+          }
+        })
+        .then(members => resolve(members || []))
+        .catch(err => {
+          console.log(err);
+          reject(err);
+        });
+    } else {
+      return resolve([]);
+    }
+  });
+}
+
+module.exports = { queryAllMembers, queryAllDaos, queryAllClans, getMember }
