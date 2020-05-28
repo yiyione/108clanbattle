@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid style="max-width: 1010px">
+  <v-container>
     <v-row class="text-center">
       <v-col cols="12">
         <v-img
@@ -12,7 +12,7 @@
       </v-col>
 
       <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">
+        <h1 class="display-1 font-weight-bold mb-3">
           欢迎来到108集团公会
         </h1>
 

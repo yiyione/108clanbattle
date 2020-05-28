@@ -33,19 +33,19 @@
       <v-col>
       </v-col>
       <v-col>
-        <v-btn x-large color="success">报刀</v-btn>
+        <v-btn large color="success">报刀</v-btn>
       </v-col>
       <v-col>
-        <v-btn x-large color="warning">补时刀</v-btn>
+        <v-btn large color="warning">补时刀</v-btn>
       </v-col>
       <v-col>
-        <v-btn x-large color="warning">尾刀</v-btn>
+        <v-btn large color="warning">尾刀</v-btn>
       </v-col>
       <v-col>
-        <v-btn x-large color="error">掉刀</v-btn>
+        <v-btn large color="error">掉刀</v-btn>
       </v-col>
       <v-col>
-        <v-btn x-large color="error">挂树</v-btn>
+        <v-btn large color="error">挂树</v-btn>
       </v-col>
       <v-col>
       </v-col>
@@ -54,16 +54,16 @@
       <v-col>
       </v-col>
       <v-col>
-        <v-btn x-large color="primary">申请出刀</v-btn>
+        <v-btn large color="primary">申请出刀</v-btn>
       </v-col>
       <v-col>
-        <v-btn x-large>取消申请</v-btn>
+        <v-btn large>取消申请</v-btn>
       </v-col>
       <v-col>
-        <v-btn x-large>预约BOSS</v-btn>
+        <v-btn large>预约BOSS</v-btn>
       </v-col>
       <v-col>
-        <v-btn x-large>取消预约</v-btn>
+        <v-btn large>取消预约</v-btn>
       </v-col>
       <v-col>
       </v-col>

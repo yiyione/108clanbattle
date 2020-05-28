@@ -47,5 +47,8 @@ export default {
   data: () => ({
     //
   }),
+  created() {
+     document.title="公主连结·108集团";
+  }
 };
 </script>
