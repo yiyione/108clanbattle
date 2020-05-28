@@ -104,6 +104,10 @@
       ],
       battleData: [
         {
+          text: 'BOSS',
+          view: 'Boss',
+        },
+        {
           text: '工会列表',
           view: 'Clans',
         },
