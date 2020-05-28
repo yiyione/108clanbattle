@@ -3,7 +3,7 @@
     <v-row class="text-center">
       <v-col cols="12">
         <v-img
-          src="https://i2.wp.com/www.theilluminerdi.com/wp-content/uploads/2020/03/princess-connect-redive-anime.jpg"
+          src="../assets/princess-connect-redive-anime.jpg"
           class="my-3"
           contain
           height="100%"
@@ -125,7 +125,7 @@
           view: 'Qidai',
         },
       ],
-      currentView: ''
+      currentView: 'Boss'
     }),
     methods: {
       switchView(view) {
