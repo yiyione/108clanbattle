@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid style="max-width: 1010px">
     <v-row class="text-center">
       <v-col cols="12">
         <v-img

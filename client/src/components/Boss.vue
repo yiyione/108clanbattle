@@ -29,43 +29,39 @@
         </v-col>
     </v-row>
 
-    <v-row align="center">
-      <v-col>
-        <v-btn x-large color="success">报刀</v-btn>
+    <v-row justify="center">
+      <v-col cols="2">
+        <v-btn x-large color="success" min-width="150px">报刀</v-btn>
       </v-col>
-      <v-col>
-        <v-btn x-large color="warning">补时刀</v-btn>
+      <v-col cols="2">
+        <v-btn x-large color="warning" min-width="150px">补时刀</v-btn>
       </v-col>
-      <v-col>
-        <v-btn x-large color="warning">尾刀</v-btn>
-      </v-col>
-    </v-row>
-    <v-row align="center">
-      <v-col>
-      </v-col>
-      <v-col>
-        <v-btn x-large color="error">掉刀</v-btn>
-      </v-col>
-      <v-col>
-        <v-btn x-large color="error">挂树</v-btn>
-      </v-col>
-      <v-col>
+      <v-col cols="2">
+        <v-btn x-large color="warning" min-width="150px">尾刀</v-btn>
       </v-col>
     </v-row>
-    <v-row align="center">
-      <v-col>
-        <v-btn x-large color="primary">申请出刀</v-btn>
+    <v-row justify="center">
+      <v-col cols="2">
+        <v-btn x-large color="error" min-width="150px">掉刀</v-btn>
       </v-col>
-      <v-col>
-        <v-btn x-large>取消申请</v-btn>
+      <v-col cols="2">
+        <v-btn x-large color="error" min-width="150px">挂树</v-btn>
       </v-col>
     </v-row>
-    <v-row align="center">
-      <v-col>
-        <v-btn x-large>预约BOSS</v-btn>
+    <v-row justify="center">
+      <v-col cols="2">
+        <v-btn x-large color="primary" min-width="150px"> 申请出刀 </v-btn>
       </v-col>
-      <v-col>
-        <v-btn x-large>取消预约</v-btn>
+      <v-col cols="2">
+        <v-btn x-large min-width="150px"> 取消申请 </v-btn>
+      </v-col>
+    </v-row>
+    <v-row justify="center">
+      <v-col cols="2">
+        <v-btn x-large min-width="150px">预约BOSS</v-btn>
+      </v-col>
+      <v-col cols="2">
+        <v-btn x-large min-width="150px"> 取消预约 </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -88,7 +84,7 @@ export default {
   },
   mounted() {
     axios.get('/api/boss?gid=1020774592').then(res => {
-      res.data.challenger = undefined;
+      // res.data.challenger = undefined;
       this.bossData = res.data;
     }).catch(err => {
       console.log(err);
