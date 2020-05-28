@@ -33,7 +33,7 @@ export default {
           });
           res.data.forEach(item => {
             item.time = item.time.split('.')[0];
-            item.text = `E${item.eid}，${map[item.uid]}，时间:${item.time}，${item.round}周目，BOSS ${item.boss}，伤害:${item.dmg}`;
+            item.text = `${map[item.uid]}，${item.round}周目，BOSS ${item.boss}，伤害:${item.dmg}，E${item.eid}，时间:${item.time}`;
           });
           this.daoList = res.data;
         }).catch(err => {
