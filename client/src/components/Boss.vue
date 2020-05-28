@@ -31,37 +31,37 @@
 
     <v-row justify="center">
       <v-col cols="2">
-        <v-btn x-large color="success" min-width="150px">报刀</v-btn>
+        <v-btn x-large color="success" min-width="100%">报刀</v-btn>
       </v-col>
       <v-col cols="2">
-        <v-btn x-large color="warning" min-width="150px">补时刀</v-btn>
+        <v-btn x-large color="warning" min-width="100%">补时刀</v-btn>
       </v-col>
       <v-col cols="2">
-        <v-btn x-large color="warning" min-width="150px">尾刀</v-btn>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="2">
-        <v-btn x-large color="error" min-width="150px">掉刀</v-btn>
-      </v-col>
-      <v-col cols="2">
-        <v-btn x-large color="error" min-width="150px">挂树</v-btn>
+        <v-btn x-large color="warning" min-width="100%">尾刀</v-btn>
       </v-col>
     </v-row>
     <v-row justify="center">
       <v-col cols="2">
-        <v-btn x-large color="primary" min-width="150px"> 申请出刀 </v-btn>
+        <v-btn x-large color="error" min-width="100%">掉刀</v-btn>
       </v-col>
       <v-col cols="2">
-        <v-btn x-large min-width="150px"> 取消申请 </v-btn>
+        <v-btn x-large color="error" min-width="100%">挂树</v-btn>
       </v-col>
     </v-row>
     <v-row justify="center">
       <v-col cols="2">
-        <v-btn x-large min-width="150px">预约BOSS</v-btn>
+        <v-btn x-large color="primary" min-width="100%"> 申请出刀 </v-btn>
       </v-col>
       <v-col cols="2">
-        <v-btn x-large min-width="150px"> 取消预约 </v-btn>
+        <v-btn x-large min-width="100%"> 取消申请 </v-btn>
+      </v-col>
+    </v-row>
+    <v-row justify="center">
+      <v-col cols="2">
+        <v-btn x-large min-width="100%">预约BOSS</v-btn>
+      </v-col>
+      <v-col cols="2">
+        <v-btn x-large min-width="100%"> 取消预约 </v-btn>
       </v-col>
     </v-row>
   </v-container>
