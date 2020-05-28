@@ -10,9 +10,9 @@
           alt="Vuetify Logo"
           class="shrink mr-2"
           contain
-          src="https://i0.hdslb.com/bfs/bigfun/d2cc202ca3c6f15b46d035e0b76e14a0d215d6fc.png"
+          src=".\assets\pcr.png"
           transition="scale-transition"
-          width="40"
+          width="40%"
         />
       </div>
 
@@ -23,7 +23,7 @@
         target="_blank"
         text
       >
-        <span class="mr-2">公主连结·108集团公会</span>
+        <span class="mr-2">登录</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-app-bar>
