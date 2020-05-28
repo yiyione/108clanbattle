@@ -42,15 +42,17 @@
     </v-row>
     <v-row align="center">
       <v-col>
+      </v-col>
+      <v-col>
         <v-btn x-large color="error">掉刀</v-btn>
       </v-col>
       <v-col>
         <v-btn x-large color="error">挂树</v-btn>
       </v-col>
-    </v-row>
-    <v-row align="center">
       <v-col>
       </v-col>
+    </v-row>
+    <v-row align="center">
       <v-col>
         <v-btn x-large color="primary">申请出刀</v-btn>
       </v-col>
@@ -64,8 +66,6 @@
       </v-col>
       <v-col>
         <v-btn x-large>取消预约</v-btn>
-      </v-col>
-      <v-col>
       </v-col>
     </v-row>
   </v-container>
