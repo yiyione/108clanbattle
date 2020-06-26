@@ -10,6 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
+    "express-jwt": "^5.3.3",
+    "jsonwebtoken": "^8.5.1",
     "sequelize": "^5.21.9",
     "sqlite3": "^4.2.0"
   },

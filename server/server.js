@@ -1,7 +1,10 @@
-const db = require('./db');
-const { BattleMaster } = require('./models/battleMaster');
-
+const jwt = require('express-jwt');
 const express = require('express');
+
+const { BattleMaster } = require('./models/battleMaster');
+const db = require('./db');
+const config = require('./config.json');
+
 const app = express()
 const port = 80
 
@@ -38,6 +41,12 @@ app.get('/api/boss', (req, res) => {
         res.sendStatus(404);
     });
 });
+
+app.get('/api/login', jwt({ secret: config['secret']}), (req, res) => {
+    if (req.uid) {
+        res.send(200, req.uid);
+    }
+})
 
 app.use(express.static('client/dist'));
 
