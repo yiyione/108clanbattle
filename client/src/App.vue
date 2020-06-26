@@ -45,6 +45,7 @@
               name="groupId"
               prepend-icon="mdi-account-multiple"
               type="text"
+              v-model="input.groupId"
             ></v-text-field>
 
             <v-text-field
@@ -53,12 +54,13 @@
               name="token"
               prepend-icon="mdi-lock"
               type="password"
+              v-model="input.token"
             ></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="login()">登录</v-btn>
+          <v-btn color="primary" @click="login(input.groupId, input.token)">登录</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -87,7 +89,11 @@ export default {
 
   data: () => ({
     loginDialog: false,
-    hasLogin: false
+    hasLogin: false,
+    input: {
+      groupId: "",
+      token: ""
+    }
   }),
   created() {
      document.title="公主连结·108集团";
@@ -102,6 +108,7 @@ export default {
         Vue.$cookies.set('gid', gid);
         Vue.$cookies.set('uid', res.uid);
         this.hasLogin = true;
+        this.loginDialog = false;
       }).catch(err => {
         console.log(err);
       });

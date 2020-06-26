@@ -42,9 +42,11 @@ app.get('/api/boss', (req, res) => {
     });
 });
 
-app.get('/api/login', jwt({ secret: config['secret']}), (req, res) => {
-    if (req.uid) {
-        res.send(200, {uid: req.uid});
+app.get('/api/login', jwt({ secret: config.secret}), (req, res) => {
+    if (req.user.uid) {
+        res.send(req.user);
+    } else {
+        res.sendStatus(401);
     }
 })
 
