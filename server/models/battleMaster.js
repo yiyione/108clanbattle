@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const os = require('os');
 
 const db = require('../db');
@@ -73,6 +74,51 @@ class BattleMaster {
         }
     }
 
+    loadSubscribe() {
+        const filename = path.join(this.subscribePath, `${this.group}.json`);
+        if (fs.existsSync(filename)) {
+            const f = fs.readFileSync(filename, { encoding: 'utf8' });
+            return JSON.parse(f);
+        } else {
+            const result = {'1':[], '2':[], '3':[], '4':[], '5':[]};
+            result[this.subscribeTreeKey] = [];
+            result[this.lockKey] = [];
+            return result;
+        }
+    }
+
+    saveSubscribe(sub) {
+        if (!fs.existsSync(this.subscribePath)){
+            fs.mkdirSync(this.subscribePath, { recursive: true });
+        }
+        const filename = path.join(this.subscribePath, `${this.group}.json`);
+        fs.writeFileSync(filename, JSON.stringify(sub), { encoding: 'utf8' });
+    }
+
+    getCurrentSub() {
+        return new Promise((resolve, reject) => {
+            try {
+                const sub = this.loadSubscribe();
+                if (sub[this.lockKey].length > 0) {
+                    const uid = sub[this.lockKey][0][0];
+                    db.getMember({ uid, alt: this.group }).then(data => {
+                        if (data.length > 0) {
+                            resolve(data[0]);
+                        } else {
+                            resolve(undefined);
+                        }
+                    }).catch(err => {
+                        reject(err);
+                    })
+                } else {
+                    resolve(undefined);
+                }
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
     getBossInfo(round, boss) {
         const stage = BattleMaster.getStage(round);
         const bossHP = config['BOSS_HP_CN'][stage - 1][boss - 1];
@@ -97,7 +143,9 @@ class BattleMaster {
                 let remind_hp = total_hp;
 
                 if (challens === undefined || challens.length === 0) {
-                    resolve({ round, boss, remind_hp, total_hp, challenger });
+                    this.getCurrentSub()
+                        .then(challenger => resolve({ round, boss, remind_hp, total_hp, challenger }))
+                        .catch(err => reject(err));
                 } else {
                     const last = challens[challens.length - 1];
                     round = last.round;
@@ -121,7 +169,9 @@ class BattleMaster {
                         remind_hp = total_hp;
                     }
 
-                    resolve({ round, boss, remind_hp, total_hp, challenger });
+                    this.getCurrentSub()
+                        .then(challenger => resolve({ round, boss, remind_hp, total_hp, challenger }))
+                        .catch(err => reject(err));
                 }
             }).catch(err => {
                 reject(err);
