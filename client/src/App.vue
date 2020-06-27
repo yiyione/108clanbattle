@@ -10,7 +10,7 @@
           alt='Vuetify Logo'
           class='shrink mr-2'
           contain
-          src='.\assets\pcr.png'
+          src='./assets/pcr.png'
           transition='scale-transition'
           width='40%'
         />
