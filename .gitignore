@@ -20,3 +20,4 @@ yarn-error.log*
 *.sln
 *.sw?
 server/config.json
+client/config.json
