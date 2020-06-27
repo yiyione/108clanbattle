@@ -2,12 +2,19 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 
-const db = require('../db');
+const { Member } = require('./member');
+const { Clan } = require('./clan');
+const { Dao } = require('./dao');
+
 const config = require('../config.json');
 
 class BattleMaster {
     constructor(group) {
         this.group = group;
+        this.member = new Member();
+        this.clan = new Clan();
+        this.dao = new Dao();
+    
         this.subscribePath = path.join(os.homedir(), '.hoshino/clanbattle_sub/');
         this.subscribeMax = [99, 6, 6, 6, 6, 6];
         this.subscribeTreeKey = '0';
@@ -95,28 +102,20 @@ class BattleMaster {
         fs.writeFileSync(filename, JSON.stringify(sub), { encoding: 'utf8' });
     }
 
-    getCurrentSub() {
-        return new Promise((resolve, reject) => {
-            try {
-                const sub = this.loadSubscribe();
-                if (sub[this.lockKey].length > 0) {
-                    const uid = sub[this.lockKey][0][0];
-                    db.getMember({ uid, alt: this.group }).then(data => {
-                        if (data.length > 0) {
-                            resolve(data[0]);
-                        } else {
-                            resolve(undefined);
-                        }
-                    }).catch(err => {
-                        reject(err);
-                    })
-                } else {
-                    resolve(undefined);
-                }
-            } catch (err) {
-                reject(err);
+    async getCurrentSub() {
+        try {
+            const sub = this.loadSubscribe();
+            if (sub[this.lockKey].length > 0) {
+                const uid = sub[this.lockKey][0][0];
+                
+                const members = await this.member.get({ uid, alt: this.group });
+                return members.length > 0 ? members[0] : undefined;
+            } else {
+                return undefined;
             }
-        });
+        } catch (err) {
+            return undefined;
+        }
     }
 
     getBossInfo(round, boss) {
@@ -129,54 +128,54 @@ class BattleMaster {
         }
     }
 
-    getChallengeProgress(cid, time) {
+    async getChallengeProgress(cid, time) {
         if (time === undefined) {
             time = new Date();
         }
-        return new Promise((resolve, reject) => {
-            db.queryAllDaos({
+        try {
+            const daos = await this.dao.get({
                 ...{ gid: this.group, cid }, ...BattleMaster.getDateString(time)
-            }).then(challens => {
-                let round = 1;
-                let boss = 1;
-                let total_hp = this.getBossInfo(1, 1).bossHP;
-                let remind_hp = total_hp;
+            });
+            
+            let round = 1;
+            let boss = 1;
+            let total_hp = this.getBossInfo(1, 1).bossHP;
+            let remind_hp = total_hp;
 
-                if (challens === undefined || challens.length === 0) {
-                    this.getCurrentSub()
-                        .then(challenger => resolve({ round, boss, remind_hp, total_hp, challenger }))
-                        .catch(err => reject(err));
-                } else {
-                    const last = challens[challens.length - 1];
-                    round = last.round;
-                    boss = last.boss;
+            if (daos && daos.length !== 0) {
+                const last = daos[daos.length - 1];
+                round = last.round;
+                boss = last.boss;
+                total_hp = this.getBossInfo(round, boss).bossHP;
+                remind_hp = total_hp;
+                for (let i = daos.length - 1; i >= 0; --i) {
+                    const item = daos[i];
+                    if (item.round != round || item.boss != boss) {
+                        break;
+                    }
+
+                    remind_hp -= item.dmg;
+                }
+
+                if (remind_hp <= 0) {
+                    const next = BattleMaster.nextBoss(round, boss);
+                    round = next.round;
+                    boss = next.boss;
                     total_hp = this.getBossInfo(round, boss).bossHP;
                     remind_hp = total_hp;
-                    for (let i = challens.length - 1; i >= 0; --i) {
-                        const item = challens[i];
-                        if (item.round != round || item.boss != boss) {
-                            break;
-                        }
-
-                        remind_hp -= item.dmg;
-                    }
-
-                    if (remind_hp <= 0) {
-                        const next = BattleMaster.nextBoss(round, boss);
-                        round = next.round;
-                        boss = next.boss;
-                        total_hp = this.getBossInfo(round, boss).bossHP;
-                        remind_hp = total_hp;
-                    }
-
-                    this.getCurrentSub()
-                        .then(challenger => resolve({ round, boss, remind_hp, total_hp, challenger }))
-                        .catch(err => reject(err));
                 }
-            }).catch(err => {
-                reject(err);
-            });
-        });
+            }
+
+            return {
+                round, boss, remind_hp, total_hp, challenger: await this.getCurrentSub()
+            };
+        } catch (err) {
+            console.log(err);
+            const hp = this.getBossInfo(1, 1).bossHP;
+            return {
+                round: 1, boss: 1, remind_hp: hp, total_hp: hp
+            }
+        }
     }
 }
 
