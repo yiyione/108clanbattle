@@ -70,6 +70,8 @@ import Vue from 'vue';
 import VueCookies from 'vue-cookies';
 import axios from 'axios';
 
+import config from '../../config.json';
+
 Vue.use(VueCookies);
 
 export default {
@@ -86,7 +88,8 @@ export default {
     }
   },
   mounted() {
-    const gid = Vue.$cookies.get('gid');
+    const gid = Vue.$cookies.get('gid') || config.defaultGid;
+
     axios.get(`/api/boss?gid=${gid}`).then(res => {
       this.bossData = res.data;
     }).catch(err => {

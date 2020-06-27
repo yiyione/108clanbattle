@@ -91,7 +91,7 @@
 import Vue from 'vue';
 import VueCookies from 'vue-cookies';
 import axios from 'axios';
-import config from '../config.json';
+import config from '../../config.json';
 
 Vue.use(VueCookies);
 
