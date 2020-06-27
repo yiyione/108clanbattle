@@ -88,13 +88,18 @@
 </template>
 
 <script>
-const axios = require('axios');
+import Vue from 'vue';
+import VueCookies from 'vue-cookies';
+import axios from 'axios';
+import config from '../config.json';
+
+Vue.use(VueCookies);
+
 export default {
   name: 'Daos',
   data() {
     return {
-      // date: new Date().toISOString().substr(0, 10),
-      date: '2020-05-19',
+      date: new Date().toISOString().substr(0, 10),
       menu2: false,
       table: {
         headers: [
@@ -136,8 +141,11 @@ export default {
   },
   methods: {
     getData() {
-      axios.get(`/api/daos?gid=1020774592&cid=1`).then(res => {
-        axios.get(`/api/members?gid=1020774592&cid=1`).then(memberRes => {
+      const gid = Vue.$cookies.get('gid') || config.defaultGid;
+      const cid = Vue.$cookies.get('cid') || config.defaultCid;
+
+      axios.get(`/api/daos?gid=${gid}&cid=${cid}`).then(res => {
+        axios.get(`/api/members?gid=${gid}&cid=${cid}`).then(memberRes => {
             const map = {};
             memberRes.data.forEach(item => {
               map[item.uid] = item.name;

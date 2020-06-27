@@ -66,7 +66,12 @@
 </template>
 
 <script>
-const axios = require('axios');
+import Vue from 'vue';
+import VueCookies from 'vue-cookies';
+import axios from 'axios';
+
+Vue.use(VueCookies);
+
 export default {
   name: 'Boss',
   data() {
@@ -81,8 +86,8 @@ export default {
     }
   },
   mounted() {
-    axios.get('/api/boss?gid=1020774592').then(res => {
-      // res.data.challenger = undefined;
+    const gid = Vue.$cookies.get('gid');
+    axios.get(`/api/boss?gid=${gid}`).then(res => {
       this.bossData = res.data;
     }).catch(err => {
       console.log(err);
