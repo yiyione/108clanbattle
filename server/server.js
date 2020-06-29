@@ -1,5 +1,6 @@
 const jwt = require('express-jwt');
 const express = require('express');
+const bodyParser = require('body-parser')
 
 const { BattleMaster } = require('./models/battleMaster');
 const { Member } = require('./models/member');
@@ -9,8 +10,11 @@ const { Dao } = require('./models/dao');
 const db = require('./db');
 const config = require('./config.json');
 
-const app = express()
-const port = 80
+const app = express();
+const port = 80;
+
+app.use(bodyParser.json());
+app.use(express.static('client/dist'));
 
 app.get('/api/login', jwt({ secret: config.secret}), async (req, res) => {
     try {
@@ -68,7 +72,25 @@ app.get('/api/boss', async (req, res) => {
     };
 });
 
-app.use(express.static('client/dist'));
+app.post('/api/remain', jwt({ secret: config.secret}), async (req, res) => {
+    console.log(req.body);
+    if (req.body.targets && Array.isArray(req.body.targets) && req.query.gid && req.query.cid) {
+        try {
+            const dao = new Dao();
+            const member = new Member();
+            const username =
+                await member.getUserName(req.user.uid, req.query.gid, req.query.cid);
+            res.send(
+                await dao.remain(req.body.targets, username, req.query)
+            );
+        } catch (err) {
+            console.log(err);
+            res.sendStatus(400);
+        }
+    } else {
+        res.sendStatus(400);
+    }
+});
 
 app.listen(port, () =>
     console.log(`Example app listening at http://localhost:${port}`)

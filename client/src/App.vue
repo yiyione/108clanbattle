@@ -132,6 +132,7 @@ export default {
         Vue.$cookies.set('gid', gid);
         Vue.$cookies.set('uid', res.data.uid);
         Vue.$cookies.set('name', res.data.name);
+        Vue.$cookies.set('token', token);
         this.loginInfo = {
           login: true,
           loginDialog: false,

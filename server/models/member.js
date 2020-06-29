@@ -52,6 +52,10 @@ class Member {
             }
         });
     }
+    async getUserName(uid, gid, cid) {
+        const res = await this.get({ uid, gid, cid });
+        return res.length > 0 ? res[0].name : undefined;
+    }
 }
 
 module.exports = { Member };

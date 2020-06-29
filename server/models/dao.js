@@ -1,5 +1,6 @@
-const { sequelize } = require('../db');
 const { DataTypes } = require('sequelize');
+const { sequelize } = require('../db');
+const { MiraiSession } = require('./miraiSession');
 
 const daoDefine = {
     eid: {
@@ -111,6 +112,64 @@ class Dao {
             });
         } else {
             return [];
+        }
+    }
+
+    async getDayDaos(query) {
+        const daos = await this.get(query);
+        const dayDaos = [];
+        const today = getDateString();
+        for (const dao of daos) {
+            if (getDateString(new Date(dao.time)).dd === today.dd) {
+                dayDaos.push(dao);
+            }
+        }
+        return dayDaos;
+    }
+
+    async remain(targets, source, query) {
+        const daos = await this.getDayDaos(query);
+        const cnt = {};
+        for (const target of targets) {
+            cnt[target] = 3;
+        }
+        for (const dao of daos) {
+            if (cnt[dao.uid]) {
+                if (dao.flag === 0x01 || dao.flag === 0x04) {
+                    cnt[dao.uid] -= 0.5;
+                } else {
+                    cnt[dao.uid] -= 1;
+                }
+            }
+        }
+        const message = [{
+            type: 'Plain',
+            text: `====催刀====\n`
+        }];
+        for (const [uid, left] of Object.entries(cnt)) {
+            message.push({
+                type: 'Plain',
+                text: `剩${left}刀 | `
+            }, {
+                type: 'At',
+                target: uid,
+                display: ''
+            }, {
+                type: 'Plain',
+                text: '\n'
+            });
+        }
+
+        message.push({
+            type: 'Plain',
+            text: `===========\n在？${source}喊你出刀啦！`
+        })
+
+        const miraiSession = new MiraiSession();
+        if (source) {
+            return await miraiSession.sendGroupMessageAllInOne(query.gid, message);
+        } else {
+            return "Gid ERROR";
         }
     }
 }

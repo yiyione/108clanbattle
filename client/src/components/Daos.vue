@@ -286,6 +286,34 @@ export default {
       }
 
       this.unfinishSelected = !this.unfinishSelected;
+    },
+    remain() {
+      const gid = Vue.$cookies.get('gid') || config.defaultGid;
+      const cid = Vue.$cookies.get('cid') || config.defaultCid;
+      const token = Vue.$cookies.get('token');
+
+      if (token) {
+        const targets = [];
+        this.table.selected.forEach(idx => {
+          targets.push(this.table.daos[idx].uid);
+        })
+        axios.post(`/api/remain?gid=${gid}&cid=${cid}`, {
+          targets: targets
+        }, {
+          headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          }
+        }).then(res => {
+          console.log(res.data);
+        }).catch(err => {
+          console.log(err);
+          alert('催刀失败');
+        });
+        alert('已提交催刀请求');
+      } else {
+        alert('催刀请先登录');
+      }
     }
   }
 }
