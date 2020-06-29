@@ -182,7 +182,9 @@ export default {
       }
     },
     getDataDaos(daoList) {
-      const ds = this.getDateString(new Date(Date.parse(this.date.replace(/-/g, '/'))));
+      const today = new Date(Date.parse(this.date.replace(/-/g, '/')));
+      today.setHours(6);
+      const ds = this.getDateString(today);
       const map = {};
       daoList.forEach(item => {
         const itemDS = this.getDateString(new Date(item.time))
@@ -241,6 +243,7 @@ export default {
         if (date === undefined) {
             date = new Date();
         }
+        date.setHours(date.getHours() - 5);
         let yyyy = date.getFullYear();
         let mm = date.getMonth() + 1;
         let dd = date.getDate();
