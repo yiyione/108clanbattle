@@ -26,6 +26,7 @@ class BattleMaster {
             date = new Date();
         }
         
+        date.setHours(date.getHours() - 5);
         let yyyy = date.getFullYear();
         let mm = date.getMonth() + 1;
         let dd = date.getDate();
