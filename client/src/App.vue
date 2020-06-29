@@ -89,7 +89,6 @@ export default {
   components: {
     Welcome,
   },
-
   data: () => ({
     loginInfo: {
       loginDialog: false,

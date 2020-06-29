@@ -20,7 +20,7 @@
               v-on="on"
             ></v-text-field>
           </template>
-          <v-date-picker v-model="date" @input="menu2 = false"></v-date-picker>
+          <v-date-picker v-model="date" @input="menu2 = false; getData();"></v-date-picker>
         </v-menu>
       </v-col>
       <v-spacer></v-spacer>
@@ -89,11 +89,8 @@
 
 <script>
 import Vue from 'vue';
-import VueCookies from 'vue-cookies';
 import axios from 'axios';
 import config from '../../config.json';
-
-Vue.use(VueCookies);
 
 export default {
   name: 'Daos',
@@ -184,7 +181,6 @@ export default {
       }
     },
     getDataDaos(daoList) {
-      console.log(daoList)
       const ds = this.getDateString(new Date(Date.parse(this.date.replace(/-/g, '/'))));
       const map = {};
       daoList.forEach(item => {

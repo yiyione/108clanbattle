@@ -70,6 +70,7 @@
   import Clans from './Clans';
   import Daos from './Daos';
   import Boss from './Boss';
+  import Statistic from './Statistic';
   import Qidai from './Qidai';
 
   export default {
@@ -78,6 +79,7 @@
       Clans,
       Daos,
       Boss,
+      Statistic,
       Qidai
     },
     data: () => ({
@@ -118,7 +120,7 @@
         },
         {
           text: '伤害统计',
-          view: 'Qidai',
+          view: 'Statistic',
         },
         {
           text: '积分统计',
