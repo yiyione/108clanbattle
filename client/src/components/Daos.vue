@@ -28,7 +28,7 @@
         <v-btn x-large color="primary" min-width="100%" v-on:click="selectUnfinish()">选中未完成</v-btn>
       </v-col>
       <v-col>
-        <v-btn x-large color="error" min-width="100%">催刀</v-btn>
+        <v-btn x-large color="error" min-width="100%" v-on:click="remain()">催刀</v-btn>
       </v-col>
     </v-row>
     <v-spacer></v-spacer>

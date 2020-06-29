@@ -135,7 +135,7 @@ class Dao {
         }
         for (const dao of daos) {
             if (cnt[dao.uid]) {
-                if (dao.flag === 0x01 || dao.flag === 0x04) {
+                if (dao.flag === 0x01 || dao.flag === 0x02) {
                     cnt[dao.uid] -= 0.5;
                 } else {
                     cnt[dao.uid] -= 1;
