@@ -25,7 +25,7 @@
       </v-col>
       <v-spacer></v-spacer>
       <v-col>
-        <v-btn x-large color="primary" min-width="100%">选中未完成</v-btn>
+        <v-btn x-large color="primary" min-width="100%" v-on:click="selectUnfinish()">选中未完成</v-btn>
       </v-col>
       <v-col>
         <v-btn x-large color="error" min-width="100%">催刀</v-btn>
@@ -96,7 +96,7 @@ export default {
   name: 'Daos',
   data() {
     return {
-      date: new Date().toISOString().substr(0, 10),
+      date: this.getLocalTime(),
       menu2: false,
       table: {
         headers: [
@@ -110,7 +110,8 @@ export default {
         daos: [],
         selected: []
       },
-      daoList: []
+      daoList: [],
+      unfinishSelected: false
     }
   },
   mounted() {
@@ -119,14 +120,14 @@ export default {
   computed: {
     selectAll: {
       set(val) {
-        for (const index of this.table.selected) {
-          this.table.daos[index].selected = false;
-        }
-        this.table.selected = [];
+        this.clearSelected();
         if (val) {
           for (let i = 0; i < this.table.daos.length; ++ i) {
-            this.table.daos[i].selected = true;
             this.table.selected.push(i);
+
+            const dao = this.table.daos[i];
+            dao.selected = true;
+            Vue.set(this.table.daos, i, dao);
             this.table.index[i] = i;
           }
         }
@@ -258,6 +259,33 @@ export default {
             mm,
             dd
         };
+    },
+    getLocalTime() {
+      var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+      return (new Date(Date.now() - tzoffset)).toISOString().substr(0, 10);
+    },
+    clearSelected() {
+        for (const index of this.table.selected) {
+          const dao = this.table.daos[index];
+          dao.selected = false;
+          Vue.set(this.table.daos, index, dao);
+        }
+        this.table.selected = [];
+    },
+    selectUnfinish() {
+      this.clearSelected();
+      if (!this.unfinishSelected) {
+        for (const [i, item] of this.table.daos.entries()) {
+          if (item.left > 0) {
+            const dao = this.table.daos[i];
+            dao.selected = true;
+            this.select(i, item);
+            Vue.set(this.table.daos, i, dao);
+          }
+        }
+      }
+
+      this.unfinishSelected = !this.unfinishSelected;
     }
   }
 }
