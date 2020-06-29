@@ -145,8 +145,16 @@ export default {
       axios.get(`/api/daos?gid=${gid}&cid=${cid}`).then(res => {
         axios.get(`/api/members?gid=${gid}&cid=${cid}`).then(memberRes => {
             const map = {};
+            const uidMap = {};
             memberRes.data.forEach(item => {
               map[item.uid] = item.name;
+              uidMap[item.uid] = {
+                uid: item.uid,
+                name: item.name,
+                cur: 0,
+                left: 3,
+                dao: [{},{},{}]
+              };
             });
             res.data.forEach(item => {
               item.time = item.time.split('.')[0];
@@ -154,7 +162,8 @@ export default {
               item.text = `${item.name}，${item.round}周目，BOSS ${item.boss}，伤害:${item.dmg}，E${item.eid}，时间:${item.time}`;
             });
             this.daoList = res.data;
-            this.table.daos = this.getDataDaos(this.daoList);
+
+            this.table.daos = this.getDataDaos(this.daoList, uidMap);
           }).catch(err => {
             console.log(err);
           });
@@ -181,11 +190,10 @@ export default {
         return 'green';
       }
     },
-    getDataDaos(daoList) {
+    getDataDaos(daoList, map) {
       const today = new Date(Date.parse(this.date.replace(/-/g, '/')));
       today.setHours(6);
       const ds = this.getDateString(today);
-      const map = {};
       daoList.forEach(item => {
         const itemDS = this.getDateString(new Date(item.time))
         if (itemDS.dd != ds.dd) {
