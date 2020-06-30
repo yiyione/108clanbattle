@@ -18,9 +18,16 @@
 
         <p class="subheading font-weight-regular">
           <a
-            href="https://wiki.biligame.com/pcr/%E4%BA%94%E6%9C%88%E5%85%AC%E4%BC%9A%E6%88%98%E6%94%BB%E7%95%A5%E5%8F%8A%E4%BD%9C%E4%B8%9A%E5%88%86%E4%BA%AB"
+            href="https://wiki.biligame.com/pcr/6%E3%80%817%E6%9C%88Rank%E6%8E%A8%E8%8D%90%E8%A1%A8"
             target="_blank"
-          >五月公会战攻略及作业分享</a>
+          >团队战三期双子座BOSS数据</a>
+        </p>
+
+        <p class="subheading font-weight-regular">
+          <a
+            href="https://wiki.biligame.com/pcr/6%E3%80%817%E6%9C%88Rank%E6%8E%A8%E8%8D%90%E8%A1%A8"
+            target="_blank"
+          >6、7月Rank推荐表</a>
         </p>
       </v-col>
 
