@@ -1,6 +1,8 @@
+const config = require('./config.json');
+
 module.exports = {
   "devServer": {
-    "proxy": "http://pcrbot108.eastasia.cloudapp.azure.com/"
+    "proxy": config.defaultProxy
   },
   "transpileDependencies": [
     "vue-echarts",

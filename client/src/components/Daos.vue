@@ -232,7 +232,7 @@ export default {
         }
       });
       
-      return Object.values(map);
+      return Object.values(map).sort((a, b) => b.left - a.left);
     },
     getDaoType(flag) {
       if (flag === undefined || flag === 0x00) {
