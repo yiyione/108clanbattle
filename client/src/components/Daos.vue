@@ -272,8 +272,9 @@ export default {
         };
     },
     getLocalTime() {
-      var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
-      return (new Date(Date.now() - tzoffset)).toISOString().substr(0, 10);
+      const tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+      const fiveHourMilliseconds = 5 * 60 * 60 * 1000; 
+      return (new Date(Date.now() - tzoffset - fiveHourMilliseconds)).toISOString().substr(0, 10);
     },
     clearSelected() {
         for (const index of this.table.selected) {
