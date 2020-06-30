@@ -18,7 +18,7 @@
 
         <p class="subheading font-weight-regular">
           <a
-            href="https://wiki.biligame.com/pcr/6%E3%80%817%E6%9C%88Rank%E6%8E%A8%E8%8D%90%E8%A1%A8"
+            href="https://wiki.biligame.com/pcr/%E3%80%90%E5%92%94%E5%92%94%E3%80%91%E5%9B%A2%E9%98%9F%E6%88%98%E4%B8%89%E6%9C%9F%E5%8F%8C%E5%AD%90%E5%BA%A7BOSS%E6%95%B0%E6%8D%AE"
             target="_blank"
           >团队战三期双子座BOSS数据</a>
         </p>
