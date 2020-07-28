@@ -1,6 +1,8 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../db');
 const { MiraiSession } = require('./miraiSession');
+const { CqhttpClient } = require('./cqhttpClient');
+const config = require('../config.json');
 
 const daoDefine = {
     eid: {
@@ -129,6 +131,59 @@ class Dao {
     }
 
     async remain(targets, source, query) {
+        if (config.http.mode === 'mirai') {
+            return await this.remainMirai(targets, source, query);
+        } else {
+            return await this.remainCoolq(targets, source, query);
+        }
+    }
+
+    async remainCoolq(targets, source, query) {
+        const daos = await this.getDayDaos(query);
+        const cnt = {};
+        for (const target of targets) {
+            cnt[target] = 3;
+        }
+        for (const dao of daos) {
+            if (cnt[dao.uid]) {
+                if (dao.flag === 0x01 || dao.flag === 0x02) {
+                    cnt[dao.uid] -= 0.5;
+                } else {
+                    cnt[dao.uid] -= 1;
+                }
+            }
+        }
+        const message = [{
+            type: 'text',
+            data: { text: `====催刀====\n` }
+        }];
+        for (const [uid, left] of Object.entries(cnt)) {
+            message.push({
+                type: 'text',
+                data: { text: `剩${left}刀 | ` }
+            }, {
+                type: 'at',
+                data: { qq: uid }
+            }, {
+                type: 'text',
+                data: { text: '\n' }
+            });
+        }
+
+        message.push({
+            type: 'text',
+            data: { text: `===========\n在？${source}喊你出刀啦！` }
+        })
+
+        const cqhttpClient = new CqhttpClient();
+        if (source) {
+            return await cqhttpClient.sendGroupMessageAllInOne(query.gid, message);
+        } else {
+            return "Gid ERROR";
+        }
+    }
+
+    async remainMirai(targets, source, query) {
         const daos = await this.getDayDaos(query);
         const cnt = {};
         for (const target of targets) {

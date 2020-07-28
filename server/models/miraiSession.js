@@ -3,9 +3,9 @@ const config = require('../config.json');
 
 class MiraiSession {
     constructor(apiServer, authKey, qq) {
-        this.apiServer = apiServer || config.miraiApiHttp.apiServer;
-        this.authKey = authKey || config.miraiApiHttp.authKey;
-        this.qq = qq || config.miraiApiHttp.qq;
+        this.apiServer = apiServer || config.http.apiServer;
+        this.authKey = authKey || config.http.authKey;
+        this.qq = qq || config.http.qq;
     }
 
     async auth() {

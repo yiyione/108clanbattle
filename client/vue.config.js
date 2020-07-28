@@ -2,7 +2,7 @@ const config = require('./config.json');
 
 module.exports = {
   "devServer": {
-    "proxy": config.defaultProxy
+    "proxy": "http://localhost"
   },
   "transpileDependencies": [
     "vue-echarts",
