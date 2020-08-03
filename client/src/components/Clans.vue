@@ -1,7 +1,5 @@
 <template>
-  <div class="hello">
-    <h1>欢迎使用108集团公会战机器人</h1>
-    <h3>公会列表</h3>
+  <div class="ClanList">
     <div class="asideBox">
       <aside>
         <ul class="asideMenu">
@@ -17,7 +15,7 @@
                 <ul v-show="member.isShow">
                   <li v-for="(item) in member.daoList" :key="item.eid">
                     <div class="oneMenuChildChild">
-                      <span>时间:{{item.time.split('.')[0]}},{{item.round}}周目,BOSS {{item.boss}},伤害:{{item.dmg}}</span>
+                      <span>时间:{{item.time}},{{item.round}}周目,BOSS {{item.boss}},伤害:{{item.dmg}}</span>
                     </div>
                   </li>
                 </ul>
@@ -33,7 +31,7 @@
 <script>
 const axios = require('axios');
 export default {
-  name: 'HelloWorld',
+  name: 'Clans',
   data() {
     return {
       clanList: [{
@@ -76,7 +74,10 @@ export default {
     showDaos(item, clanIndex) {
       if (!item.isShow) {
         axios.get(`/api/daos?gid=${item.gid}&cid=${item.cid}&uid=${item.uid}&alt=${item.alt}`).then(res => {
-          res.data.forEach(item => item.isShow = false);
+          res.data.forEach(item => {
+            item.isShow = false;
+            item.time = item.time.split('.')[0];
+          });
           item.daoList = res.data;
           item.isShow = !item.isShow;
           this.$set(this.clanList, clanIndex, this.clanList[clanIndex]);
@@ -120,15 +121,14 @@ export default {
         }
         .oneMenuChildChild{
           padding: 0 20px 0 20px;
-          height: 40px;
-          line-height: 40px;
+          height: 100%;
           background: $menuBackColor;
           border-bottom: 1px solid #ffffff;
           color: #454343;
           font-size: 18px;
+          word-wrap: break-word;
         }
       }
     }
   }
-
 </style>
